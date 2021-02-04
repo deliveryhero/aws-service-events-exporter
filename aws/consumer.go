@@ -1,18 +1,28 @@
 package aws
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sqs"
 	"github.com/urfave/cli"
+	"log"
+	"strconv"
 	"time"
 )
 
 type MessageProcessor struct {
-	client sqs.SQS
+	client   sqs.SQS
 	queueUrl string
+}
+
+type Message struct {
+	Message     json.RawMessage `json:"Message"`
+	MessageId   string          `json:"MessageId"`
+	TopicArn    string          `json:"TopicArn"`
+	MessageType string          `json:"Type"`
 }
 
 func Consume(ctx *cli.Context) error {
@@ -46,10 +56,10 @@ func (messageProcessor *MessageProcessor) pollQueue() error {
 			QueueUrl:            aws.String(messageProcessor.queueUrl),
 			MaxNumberOfMessages: aws.Int64(10),
 			VisibilityTimeout:   aws.Int64(10),
-			WaitTimeSeconds: aws.Int64(10),
+			WaitTimeSeconds:     aws.Int64(10),
 		}
 		receiveMessageOutput, receiveError := messageProcessor.client.ReceiveMessage(receiveMessageRequest)
-		if receiveError != nil{
+		if receiveError != nil {
 			return receiveError
 		}
 		if len(receiveMessageOutput.Messages) < 1 {
@@ -64,7 +74,12 @@ func (messageProcessor *MessageProcessor) pollQueue() error {
 }
 
 func (messageProcessor *MessageProcessor) processMessage(message *sqs.Message) {
-	fmt.Println(&message.Body)
+	msg := Message{}
+	err := json.Unmarshal([]byte(aws.StringValue(message.Body)), &msg)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(strconv.Unquote(string(msg.Message)))
 	//deleteMessageRequest := &sqs.DeleteMessageInput{
 	//	QueueUrl:            aws.String(QueueUrl),
 	//	ReceiptHandle: message.ReceiptHandle,

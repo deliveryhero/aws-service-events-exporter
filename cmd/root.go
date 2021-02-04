@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 )
+
 const bannerMsg = `
     ___        _  _                                                       
    /   \  ___ | |(_)__   __  ___  _ __  _   _    /\  /\  ___  _ __   ___  
@@ -16,40 +17,45 @@ const bannerMsg = `
                                         |___/                             
 `
 
-func RootCmd(){
+func RootCmd() {
 	app := cli.NewApp()
 	app.Name = "RDS events exporter"
 	app.Usage = "This app exports your RDS events as metric by sqs to /metrics"
 	app.Description = "This app exports your RDS events as metric by sqs to /metrics"
 	myFlags := []cli.Flag{
 		cli.StringFlag{
-			Name: "listen-address",
-			Value: "0.0.0.0",
+			Name:   "listen-address",
+			Value:  "0.0.0.0",
+			Usage:  "address to listen on for metrics",
 			EnvVar: "LISTEN_ADDRESS",
 		},
 		cli.IntFlag{
-			Name: "port",
-			Value: 9090,
+			Name:   "port",
+			Value:  9090,
+			Usage:  "port to listen on for metrics",
 			EnvVar: "PORT",
 		},
 		cli.StringFlag{
-			Name: "queue-url",
-			Value: "",
+			Name:   "queue-url",
+			Value:  "",
+			Usage:  "queue url that you need to consume rds events",
 			EnvVar: "QUEUE_URL",
 		},
 		cli.StringFlag{
-			Name: "region",
-			Value: "eu-west-1",
+			Name:   "region",
+			Value:  "eu-west-1",
+			Usage:  "AWS region",
 			EnvVar: "AWS_REGION",
 		},
 		cli.StringFlag{
-			Name: "cred-path",
-			Value: "",
+			Name:   "cred-path",
+			Value:  "",
 			EnvVar: "AWS_CREDENTIALS_PATH",
 		},
 		cli.StringFlag{
-			Name: "profile",
-			Value: "default",
+			Name:   "profile",
+			Value:  "default",
+			Usage:  "provide your aws provide to authenticate",
 			EnvVar: "AWS_PROFILE",
 		},
 	}
@@ -65,7 +71,7 @@ func RootCmd(){
 func run(c *cli.Context) error {
 	fmt.Print(bannerMsg)
 	fmt.Println()
-	log.Println(fmt.Sprintf("Prometheus exporter starting to listen on %s:%d/metrics",c.String("listen-address"), c.Int("port")))
+	log.Println(fmt.Sprintf("Prometheus exporter starting to listen on %s:%d/metrics", c.String("listen-address"), c.Int("port")))
 	err := aws.Consume(c)
 	if err != nil {
 		log.Fatal(err)
