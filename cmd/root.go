@@ -3,8 +3,9 @@ package cmd
 import (
 	"fmt"
 	"github.com/deliveryhero/log-rds-events-exporter/aws"
+	"github.com/deliveryhero/log-rds-events-exporter/metrics"
+	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
-	"log"
 	"os"
 )
 
@@ -71,10 +72,8 @@ func RootCmd() {
 func run(c *cli.Context) error {
 	fmt.Print(bannerMsg)
 	fmt.Println()
-	log.Println(fmt.Sprintf("Prometheus exporter starting to listen on %s:%d/metrics", c.String("listen-address"), c.Int("port")))
-	err := aws.Consume(c)
-	if err != nil {
-		log.Fatal(err)
-	}
+	log.Info(fmt.Sprintf("Prometheus exporter starting to listen on %s:%d/metrics", c.String("listen-address"), c.Int("port")))
+	go aws.Consume(c)
+	metrics.Serve(c)
 	return nil
 }
