@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "9090:9090"
+    volumes:
+    - $HOME/.aws/:/.aws:ro
+    restart: unless-stopped
+    env_file:
+      - .sample.env

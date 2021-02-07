@@ -55,7 +55,7 @@ func RootCmd() {
 		},
 		cli.StringFlag{
 			Name:   "profile",
-			Value:  "default",
+			Value:  "",
 			Usage:  "provide your aws provide to authenticate",
 			EnvVar: "AWS_PROFILE",
 		},

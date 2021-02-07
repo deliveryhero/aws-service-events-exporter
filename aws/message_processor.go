@@ -2,7 +2,7 @@ package aws
 
 import (
 	"encoding/json"
-	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/sqs"
 	log "github.com/sirupsen/logrus"
 	"strconv"
