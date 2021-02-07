@@ -39,11 +39,11 @@ tag: tag-latest tag-version
 
 publish-version:
 	@echo 'publish $(VERSION) to $(DOCKER_REPO)'
-	docker push $(DOCKER_REPO)/$(IMAGE_NAME):$(VERSION)
+	$(DOCKER) push $(DOCKER_REPO)/$(IMAGE_NAME):$(VERSION)
 
 publish-latest:
 	@echo 'publish latest to $(DOCKER_REPO)'
-	docker push $(DOCKER_REPO)/$(IMAGE_NAME):latest
+	$(DOCKER) push $(DOCKER_REPO)/$(IMAGE_NAME):latest
 
 repo-login:
 	@echo 'Logging in to $(DOCKER_REPO)'
