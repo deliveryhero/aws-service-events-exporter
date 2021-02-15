@@ -10,19 +10,14 @@ import (
 	"github.com/urfave/cli"
 )
 
-var (
-	eventsCounter = prometheus.NewCounterVec(
-		prometheus.CounterOpts{
-			Name: "aws_events",
-			Help: "This metric indicates which event happened on rds db instances",
-		},
-		[]string{"event_id", "event_message", "source_instance"},
-	)
+var EventsCounter = prometheus.NewCounterVec(
+	prometheus.CounterOpts{
+		Name: "aws_events",
+		Help: "This metric indicates which event happened on rds db instances",
+	},
+	[]string{"event_id", "event_message", "event_source"},
 )
 
-func init() {
-	prometheus.MustRegister(eventsCounter)
-}
 func Consume(ctx *cli.Context) {
 	QueueUrl := ctx.String("queue-url")
 	Region := ctx.String("region")
