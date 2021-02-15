@@ -1,2 +1,2 @@
-# rds-events-exporter
+# aws-events-exporter
 TODO

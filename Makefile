@@ -4,10 +4,10 @@ GOBUILD=$(GOCMD) build
 GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test
 GODEP=$(GOCMD) mod
-BINARY_NAME=rds-events-exporter
+BINARY_NAME=aws-events-exporter
 BINARY_DIR=./bin
 DOCKER=docker
-IMAGE_NAME=aws-exporter
+IMAGE_NAME=aws-events-exporter
 
 
 all: test build
@@ -21,6 +21,9 @@ clean:
 	rm -f $(BINARY_DIR)/$(BINARY_NAME)
 run: build
 	$(BINARY_DIR)/$(BINARY_NAME)
+
+dev:
+	nodemon --exec go run main.go --signal SIGTERM
 deps:
 	$(GODEP) download
 

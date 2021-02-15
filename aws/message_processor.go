@@ -2,12 +2,13 @@ package aws
 
 import (
 	"encoding/json"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/sqs"
-	log "github.com/sirupsen/logrus"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/sqs"
+	log "github.com/sirupsen/logrus"
 )
 
 type MessageProcessor struct {
@@ -17,8 +18,7 @@ type MessageProcessor struct {
 
 func (messageProcessor *MessageProcessor) pollQueue() error {
 	for {
-		log.Info("Long polling for a message... (Will wait for 10s)", messageProcessor.queueUrl)
-
+		log.Debug("Long polling for a message... (Will wait for 10s)", messageProcessor.queueUrl)
 		receiveMessageRequest := &sqs.ReceiveMessageInput{
 			QueueUrl:            aws.String(messageProcessor.queueUrl),
 			MaxNumberOfMessages: aws.Int64(10),
@@ -44,25 +44,26 @@ func (messageProcessor *MessageProcessor) processMessage(message *sqs.Message) {
 	msg := Message{}
 	err := json.Unmarshal([]byte(aws.StringValue(message.Body)), &msg)
 	if err != nil {
-		log.Info(err)
+		log.Error(err)
 		return
 	}
 	events, err := strconv.Unquote(string(msg.Message))
 	if err != nil {
-		log.Info(err)
+		log.Error(err)
 	}
 	event := RdsEventMessage{}
 	err = json.Unmarshal([]byte(events), &event)
 	if err != nil {
-		log.Info(err)
+		log.Error(err)
 		return
 	}
 	eventId := strings.Split(event.EventID, "#")
 	if len(eventId) == 1 {
-		eventsCounter.WithLabelValues("none", event.EventMessage, event.EventSource).Inc()
+		EventsCounter.WithLabelValues("none", event.EventMessage, event.SourceId).Inc()
 		return
 	}
-	eventsCounter.WithLabelValues(eventId[1], event.EventMessage, event.EventSource).Inc()
+
+	EventsCounter.WithLabelValues(eventId[1], event.EventMessage, event.SourceId).Inc()
 	//deleteMessageRequest := &sqs.DeleteMessageInput{
 	//	QueueUrl:            aws.String(QueueUrl),
 	//	ReceiptHandle: message.ReceiptHandle,
