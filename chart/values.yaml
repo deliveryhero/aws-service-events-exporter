@@ -17,15 +17,8 @@ serviceAccountName: ""
 podAnnotations: {}
 
 podSecurityContext: {}
-  # fsGroup: 2000
 
 securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
 
 service:
   type: ClusterIP
@@ -37,6 +30,11 @@ tolerations: []
 affinity: {}
 
 # extraLabels
-extraLabels:
-  name: me
-  we: us
+extraLabels: {}
+env:
+  LISTEN_ADDRESS: ""
+  PORT: ""
+  QUEUE_URL: ""
+  AWS_REGION: ""
+  AWS_CREDENTIALS_PATH: ""
+  AWS_PROFILE: ""
