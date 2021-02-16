@@ -18,22 +18,17 @@ var EventsCounter = prometheus.NewCounterVec(
 )
 
 func Consume(ctx *cli.Context) {
-	sess, err := session.NewSession(
-		&aws.Config{
-			Region:                        aws.String(ctx.String("region")),
-			CredentialsChainVerboseErrors: aws.Bool(ctx.Bool("verbose")),
-			MaxRetries:                    aws.Int(5),
-		},
-	)
+	sess, err := session.NewSession(&aws.Config{
+		Region:                        aws.String(ctx.String("region")),
+		CredentialsChainVerboseErrors: aws.Bool(ctx.Bool("verbose")),
+		MaxRetries:                    aws.Int(5),
+	})
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	messageProcessor := &MessageProcessor{
-		*sqs.New(sess),
-		ctx.String("queue-url"),
-	}
+	messageProcessor := &MessageProcessor{*sqs.New(sess), ctx.String("queue-url")}
 
 	err = messageProcessor.pollQueue() // Blocks
 	if err != nil {
