@@ -32,18 +32,10 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            name: LISTEN_ADDRESS
-            value: {{ .Values.env.LISTEN_ADDRESS | quote }}
-            name: PORT
-            value: {{ .Values.env.PORT | quote }}
-            name: QUEUE_URL
-            value: {{ .Values.env.QUEUE_URL | quote }}
-            name: AWS_REGION
-            value: {{ .Values.env.AWS_REGION | quote }}
-            name: AWS_CREDENTIALS_PATH
-            value: {{ .Values.env.AWS_CREDENTIALS_PATH | quote }}
-            name: AWS_PROFILE
-            value: {{ .Values.env.AWS_PROFILE | quote }}
+          {{- range $key, $value := .Values.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 9090

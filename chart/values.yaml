@@ -31,10 +31,4 @@ affinity: {}
 
 # extraLabels
 extraLabels: {}
-env:
-  LISTEN_ADDRESS: ""
-  PORT: ""
-  QUEUE_URL: ""
-  AWS_REGION: ""
-  AWS_CREDENTIALS_PATH: ""
-  AWS_PROFILE: ""
+env: {}
