@@ -29,6 +29,9 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 
-# extraLabels
-extraLabels: {}
+exporter:
+  port: 9090
+  listenAddress: 0.0.0.0
+  queueUrl: ""
 env: {}
+extraLabels: {}
