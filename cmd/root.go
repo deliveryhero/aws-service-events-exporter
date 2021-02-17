@@ -2,20 +2,21 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/deliveryhero/log-rds-events-exporter/aws"
 	"github.com/deliveryhero/log-rds-events-exporter/metrics"
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
-	"os"
 )
 
 const bannerMsg = `
-    ___        _  _                                                       
-   /   \  ___ | |(_)__   __  ___  _ __  _   _    /\  /\  ___  _ __   ___  
-  / /\ / / _ \| || |\ \ / / / _ \| '__|| | | |  / /_/ / / _ \| '__| / _ \ 
+    ___        _  _
+   /   \  ___ | |(_)__   __  ___  _ __  _   _    /\  /\  ___  _ __   ___
+  / /\ / / _ \| || |\ \ / / / _ \| '__|| | | |  / /_/ / / _ \| '__| / _ \
  / /_// |  __/| || | \ V / |  __/| |   | |_| | / __  / |  __/| |   | (_) |
-/___,'   \___||_||_|  \_/   \___||_|    \__, | \/ /_/   \___||_|    \___/ 
-                                        |___/                             
+/___,'   \___||_||_|  \_/   \___||_|    \__, | \/ /_/   \___||_|    \___/
+                                        |___/
 `
 
 func RootCmd() {
@@ -48,16 +49,10 @@ func RootCmd() {
 			Usage:  "AWS region",
 			EnvVar: "AWS_REGION",
 		},
-		cli.StringFlag{
-			Name:   "cred-path",
-			Value:  "",
-			EnvVar: "AWS_CREDENTIALS_PATH",
-		},
-		cli.StringFlag{
-			Name:   "profile",
-			Value:  "",
-			Usage:  "provide your aws provide to authenticate",
-			EnvVar: "AWS_PROFILE",
+		cli.BoolFlag{
+			Name:   "verbose",
+			Usage:  "runs in verbose mode",
+			EnvVar: "VERBOSE",
 		},
 	}
 	app.Flags = myFlags

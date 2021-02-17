@@ -2,7 +2,6 @@ package aws
 
 import (
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sqs"
 	"github.com/prometheus/client_golang/prometheus"
@@ -19,20 +18,18 @@ var EventsCounter = prometheus.NewCounterVec(
 )
 
 func Consume(ctx *cli.Context) {
-	QueueUrl := ctx.String("queue-url")
-	Region := ctx.String("region")
-	CredPath := ctx.String("cred-path")
-	CredProfile := ctx.String("profile")
 	sess, err := session.NewSession(&aws.Config{
-		Region:      aws.String(Region),
-		Credentials: credentials.NewSharedCredentials(CredPath, CredProfile),
-		MaxRetries:  aws.Int(5),
+		Region:                        aws.String(ctx.String("region")),
+		CredentialsChainVerboseErrors: aws.Bool(ctx.Bool("verbose")),
+		MaxRetries:                    aws.Int(5),
 	})
+
 	if err != nil {
 		log.Fatal(err)
 	}
-	client := sqs.New(sess)
-	messageProcessor := &MessageProcessor{*client, QueueUrl}
+
+	messageProcessor := &MessageProcessor{*sqs.New(sess), ctx.String("queue-url")}
+
 	err = messageProcessor.pollQueue() // Blocks
 	if err != nil {
 		log.Fatal(err)
