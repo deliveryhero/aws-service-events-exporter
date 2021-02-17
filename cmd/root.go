@@ -51,7 +51,7 @@ func RootCmd() {
 		},
 		cli.BoolFlag{
 			Name:   "verbose",
-			Usage:  "provide your aws provide to authenticate",
+			Usage:  "runs in verbose mode",
 			EnvVar: "VERBOSE",
 		},
 	}
