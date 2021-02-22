@@ -4,10 +4,10 @@ GOBUILD=$(GOCMD) build
 GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test
 GODEP=$(GOCMD) mod
-BINARY_NAME=aws-events-exporter
+BINARY_NAME=aws-service-events-exporter
 BINARY_DIR=./bin
 DOCKER=docker
-IMAGE_NAME=aws-events-exporter
+IMAGE_NAME=$(BINARY_NAME)
 
 
 all: test build

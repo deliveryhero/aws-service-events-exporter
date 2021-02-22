@@ -11,8 +11,8 @@ import (
 
 var EventsCounter = prometheus.NewCounterVec(
 	prometheus.CounterOpts{
-		Name: "aws_events",
-		Help: "This metric indicates which event happened on rds db instances",
+		Name: "aws_service_events",
+		Help: "This metric indicates on whats happening on various aws services, e.g RDS",
 	},
 	[]string{"event_id", "event_message", "event_source"},
 )
