@@ -5,7 +5,7 @@
 replicas: 1
 
 image:
-  repository: thomasnyambati/aws-events-exporter
+  repository: thomasnyambati/aws-service-events-exporter
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: 1.0.0
@@ -13,16 +13,25 @@ image:
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
+# serviceAccountName -- service account to be used by the containers
 serviceAccountName: ""
-podAnnotations: {}
+
+podAnnotations:
+  prometheus.io_scrape: "true"
+  prometheus.io/path: "/metrics"
+  prometheus.io/port: "9090"
+
+service:
+  create: false
+  # Enusre podAnnotations is set to {} before adding service.annotations
+  # annotations:
+  #   prometheus.io_scrape: "true"
+  #   prometheus.io/path: "/metrics"
+  #   prometheus.io/port: "9090"
 
 podSecurityContext: {}
 
 securityContext: {}
-
-service:
-  type: ClusterIP
-  port: 80
 
 resources: {}
 nodeSelector: {}
@@ -30,8 +39,13 @@ tolerations: []
 affinity: {}
 
 exporter:
+  # exporter.port -- Exporter port
   port: 9090
+  # exporter.listenAddress -- Exporter listening address
   listenAddress: 0.0.0.0
-  queueUrl: ""
+  # exporter.queueUrl -- SQS queue url
+  queueUrl:
+# env -- Additional environment variables
 env: {}
+# extraLabels -- Additional labels to be added to all resources
 extraLabels: {}
