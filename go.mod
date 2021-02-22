@@ -1,4 +1,4 @@
-module github.com/deliveryhero/log-rds-events-exporter
+module github.com/deliveryhero/aws-service-events-exporter
 
 go 1.15
 

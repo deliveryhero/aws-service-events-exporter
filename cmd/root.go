@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/deliveryhero/log-rds-events-exporter/aws"
-	"github.com/deliveryhero/log-rds-events-exporter/metrics"
+	"github.com/deliveryhero/aws-service-events-exporter/aws"
+	"github.com/deliveryhero/aws-service-events-exporter/metrics"
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
 )
