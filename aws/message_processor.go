@@ -48,9 +48,11 @@ func (messageProcessor *MessageProcessor) processMessage(message *sqs.Message) {
 		return
 	}
 	events, err := strconv.Unquote(string(msg.Message))
+
 	if err != nil {
 		log.Error(err)
 	}
+
 	event := RdsEventMessage{}
 	err = json.Unmarshal([]byte(events), &event)
 	if err != nil {
@@ -64,10 +66,4 @@ func (messageProcessor *MessageProcessor) processMessage(message *sqs.Message) {
 	}
 
 	EventsCounter.WithLabelValues(eventId[1], event.EventMessage, event.SourceId).Inc()
-	//deleteMessageRequest := &sqs.DeleteMessageInput{
-	//	QueueUrl:            aws.String(QueueUrl),
-	//	ReceiptHandle: message.ReceiptHandle,
-	//}
-	//_, err := messageProcessor.client.DeleteMessage(deleteMessageRequest)
-	//fmt.Println(err)
 }
