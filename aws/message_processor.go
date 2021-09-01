@@ -61,9 +61,9 @@ func (messageProcessor *MessageProcessor) processMessage(message *sqs.Message) {
 	}
 	eventId := strings.Split(event.EventID, "#")
 	if len(eventId) == 1 {
-		EventsCounter.WithLabelValues("none", event.EventMessage, event.SourceId).Inc()
+		EventsCounter.WithLabelValues("none", event.EventMessage, event.SourceId, event.EventTime).Inc()
 		return
 	}
 
-	EventsCounter.WithLabelValues(eventId[1], event.EventMessage, event.SourceId).Inc()
+	EventsCounter.WithLabelValues(eventId[1], event.EventMessage, event.SourceId, event.EventTime).Inc()
 }
