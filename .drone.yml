@@ -21,5 +21,6 @@ steps:
     tags:
       - latest
       - ${DRONE_TAG}
-    when:
-      event: tag
+  when:
+    event: tag
+    branch: master
