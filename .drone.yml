@@ -1,5 +1,25 @@
+---
 kind: pipeline
+type: kubernetes
 name: default
+
+tolerations:
+  - effect: NoSchedule
+    key: app
+    operator: Exists
+node_selector:
+  app: drone
+
+service_account_name: drone-rps-system-engineering
+
+image_pull_secrets:
+  - DOCKERCONFIG
+
+trigger:
+  event:
+    - push
+    - pull_request
+
 steps:
 - name: test
   image: golang:1.10-alpine
