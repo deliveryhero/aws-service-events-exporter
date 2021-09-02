@@ -12,11 +12,6 @@ node_selector:
 
 service_account_name: drone-rps-system-engineering
 
-trigger:
-  event:
-    - push
-    - pull_request
-
 steps:
 - name: publish  
   image: plugins/ecr
@@ -25,3 +20,6 @@ steps:
     registry: 940776968316.dkr.ecr.eu-west-1.amazonaws.com
     tags:
       - latest
+      - ${DRONE_TAG}
+    when:
+      event: tag
