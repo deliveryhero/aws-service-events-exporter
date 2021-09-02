@@ -3,14 +3,7 @@ kind: pipeline
 type: kubernetes
 name: default
 
-tolerations:
-  - effect: NoSchedule
-    key: app
-    operator: Exists
-node_selector:
-  app: drone
-
-service_account_name: drone-rps-system-engineering
+service_account_name: drone-aws-service-events-exporter
 
 steps:
 - name: publish  
