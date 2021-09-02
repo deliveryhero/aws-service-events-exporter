@@ -3,6 +3,11 @@ kind: pipeline
 type: kubernetes
 name: default
 
+tolerations:
+  - effect: NoSchedule
+    key: app
+    operator: Exists
+
 service_account_name: drone-aws-service-events-exporter
 
 steps:
