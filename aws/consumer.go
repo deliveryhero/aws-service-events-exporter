@@ -14,7 +14,7 @@ var EventsCounter = prometheus.NewCounterVec(
 		Name: "aws_service_events",
 		Help: "This metric indicates on whats happening on various aws services, e.g RDS",
 	},
-	[]string{"event_id", "event_message", "event_source", "event_time"},
+	[]string{"event_id", "event_message", "event_source"},
 )
 
 func Consume(ctx *cli.Context) {
