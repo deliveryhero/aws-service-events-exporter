@@ -32,10 +32,10 @@ func (messageProcessor *MessageProcessor) pollQueue() error {
 		if len(receiveMessageOutput.Messages) < 1 {
 			log.Info("No messages on queue. Will sleep for 1s, then long poll again.")
 			time.Sleep(time.Second)
-		}
-
-		for _, message := range receiveMessageOutput.Messages {
-			go messageProcessor.processMessage(message)
+		} else {
+			for _, message := range receiveMessageOutput.Messages {
+				go messageProcessor.processMessage(message)
+			}
 		}
 	}
 }
@@ -59,11 +59,19 @@ func (messageProcessor *MessageProcessor) processMessage(message *sqs.Message) {
 		log.Error(err)
 		return
 	}
-	eventId := strings.Split(event.EventID, "#")
-	if len(eventId) == 1 {
-		EventsCounter.WithLabelValues("none", event.EventMessage, event.SourceId).Inc()
-		return
+	eventID := strings.Split(event.EventID, "#")
+	if len(eventID) == 1 {
+		EventsCounter.WithLabelValues("none", event.EventMessage, event.SourceID).Inc()
+	} else {
+		EventsCounter.WithLabelValues(eventID[1], event.EventMessage, event.SourceID).Inc()
 	}
-
-	EventsCounter.WithLabelValues(eventId[1], event.EventMessage, event.SourceId).Inc()
+	deleteMessageRequest := &sqs.DeleteMessageInput{
+		QueueUrl:      aws.String(messageProcessor.queueUrl),
+		ReceiptHandle: message.ReceiptHandle,
+	}
+	_, err = messageProcessor.client.DeleteMessage(deleteMessageRequest)
+	if err != nil {
+		log.Error(err)
+	}
+	return
 }
