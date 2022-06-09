@@ -3,15 +3,10 @@ kind: pipeline
 type: kubernetes
 name: default
 
-tolerations:
-  - effect: NoSchedule
-    key: app
-    operator: Exists
-
-service_account_name: drone-aws-service-events-exporter
+service_account_name: drone-irsa-aws-service-events-exporter
 
 steps:
-- name: publish  
+- name: publish
   image: plugins/ecr
   settings:
     repo: dockerhub-mirror/aws-service-events-exporter
