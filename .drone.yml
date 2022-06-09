@@ -5,6 +5,9 @@ name: default
 
 service_account_name: drone-irsa-aws-service-events-exporter
 
+trigger:
+  event: pull_request
+
 steps:
 - name: publish
   image: plugins/ecr
@@ -14,5 +17,5 @@ steps:
     tags:
       - latest
       - ${DRONE_TAG}
-  when:
-    event: tag
+  # when:
+  #   event: tag
